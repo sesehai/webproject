@@ -3,6 +3,9 @@
 namespace backend\models;
 
 use common\models\Order;
+use Yii;
+use yii\base\Model;
+use yii\data\ActiveDataProvider;
 
 /**
  * This is the model class for table "order".
@@ -46,4 +49,36 @@ use common\models\Order;
  */
 class BackendOrder extends Order
 {
+    public function rules()
+    {
+        // only fields in rules() are searchable
+        return [
+            [['id'], 'integer'],
+            [['customer_name', 'addtime'], 'safe'],
+        ];
+    }
+
+    public function search($params)
+    {
+        $query = Order::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 2,
+            ],
+        ]);
+
+        // load the seach form data and validate
+        if (!($this->load($params) && $this->validate())) {
+            return $dataProvider;
+        }
+
+        // adjust the query by adding the filters
+        $query->andFilterWhere(['id' => $this->id]);
+        $query->andFilterWhere(['like', 'customer_name', $this->customer_name])
+              ->andFilterWhere(['like', 'addtime', $this->addtime]);
+
+        return $dataProvider;
+    }
 }

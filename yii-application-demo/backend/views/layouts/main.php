@@ -2,13 +2,13 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>YII - 管理系统</title>
-    <link rel="stylesheet" type="text/css" href="/yii-application/backend/web/assets/jquery-easyui-1.4.1/themes/metro/easyui.css">
-    <link rel="stylesheet" type="text/css" href="/yii-application/backend/web/assets/jquery-easyui-1.4.1/themes/icon.css">
-    <link rel="stylesheet" type="text/css" href="/yii-application/backend/web/assets/jquery-easyui-1.4.1/themes/color.css">
-    <link rel="stylesheet" type="text/css" href="/yii-application/backend/web/assets/jquery-easyui-1.4.1/themes/metro/tree.css">
-    <script type="text/javascript" src="/yii-application/backend/web/assets/jquery-easyui-1.4.1/jquery.min.js"></script>
-    <script type="text/javascript" src="/yii-application/backend/web/assets/jquery-easyui-1.4.1/jquery.easyui.min.js"></script>
+    <title>YII管理系统</title>
+    <link rel="stylesheet" type="text/css" href="/yii-application-demo/backend/web/assets/jquery-easyui-1.4.1/themes/metro/easyui.css">
+    <link rel="stylesheet" type="text/css" href="/yii-application-demo/backend/web/assets/jquery-easyui-1.4.1/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="/yii-application-demo/backend/web/assets/jquery-easyui-1.4.1/themes/color.css">
+    <link rel="stylesheet" type="text/css" href="/yii-application-demo/backend/web/assets/jquery-easyui-1.4.1/themes/metro/tree.css">
+    <script type="text/javascript" src="/yii-application-demo/backend/web/assets/jquery-easyui-1.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/yii-application-demo/backend/web/assets/jquery-easyui-1.4.1/jquery.easyui.min.js"></script>
     <style type="text/css">
         a:link,a:visited{text-decoration:none; color:#0E84D6;}
         a:hover,a:active{color:#d6630e;}
@@ -30,7 +30,7 @@
         <ul class="nav">
             <li>欢迎您：<?php echo Yii::$app->user->identity->username ?></li>
             <li>
-              <a href="/yii-application/backend/web/index.php?r=/site/logout"  >注销</a>
+              <a href="/yii-application-demo/backend/web/index.php?r=/site/logout"  >注销</a>
             </li>
         </ul>
     </div>
@@ -42,9 +42,9 @@
                     <li>
                         <span>前端页面</span>
                          <ul>
-                            <li><span><a href="javascript:;" onclick="mainJs.addTab('http://localhost/yii-application/frontend/web/index.php', '首页')">首页</a></span></li>
-                            <li><span><a href="javascript:;" onclick="mainJs.addTab('http://localhost/yii-application/frontend/web/index.php?r=site/about', '关于')">关于</a></span></li>
-                            <li><span><a href="javascript:;" onclick="mainJs.addTab('http://localhost/yii-application/frontend/web/index.php?r=site/contact', '联系')">联系</a></span></li>
+                            <li><span><a href="javascript:;" onclick="mainJs.addTab('http://localhost/yii-application-demo/frontend/web/index.php', '首页')">首页</a></span></li>
+                            <li><span><a href="javascript:;" onclick="mainJs.addTab('http://localhost/yii-application-demo/frontend/web/index.php?r=site/about', '关于')">关于</a></span></li>
+                            <li><span><a href="javascript:;" onclick="mainJs.addTab('http://localhost/yii-application-demo/frontend/web/index.php?r=site/contact', '联系')">联系</a></span></li>
                          </ul>
                     </li>
                 </ul>
@@ -55,7 +55,7 @@
                     <li>
                         <span>订单管理</span>
                          <ul>
-                            <li><span><a href="javascript:;" onclick="mainJs.addTab('http://localhost/yii-application/backend/web/index.php?r=order', '订单列表')">订单列表</a></span></li>
+                            <li><span><a href="javascript:;" onclick="mainJs.addTab('http://localhost/yii-application-demo/backend/web/index.php?r=order', '订单列表')">订单列表</a></span></li>
                          </ul>
                     </li>
                 </ul>
@@ -66,11 +66,11 @@
                   <li>
                       <span>角色或权限管理</span>
                        <ul>
-                          <li><span><a href="javascript:;" onclick="mainJs.addTab('http://localhost/yii-application/backend/web/index.php?r=auth-item', '角色或权限')">角色或权限</a></span></li>
-                          <li><span><a href="javascript:;" onclick="mainJs.addTab('http://localhost/yii-application/backend/web/index.php?r=auth-item-child', '角色权限关联')">角色权限关联</a></span></li>
-                          <li><span><a href="javascript:;" onclick="mainJs.addTab('http://localhost/yii-application/backend/web/index.php?r=auth-assignment', '用户角色')">用户角色</a></span></li>
-                          <li><span><a href="javascript:;" onclick="mainJs.addTab('http://localhost/yii-application/backend/web/index.php?r=auth-rule', '规则')">规则</a></span></li>
-                          <li><span><a href="javascript:;" onclick="mainJs.addTab('http://localhost/yii-application/backend/web/index.php?r=user', '用户')">用户</a></span></li>
+                          <li><span><a href="javascript:;" onclick="mainJs.addTab('http://localhost/yii-application-demo/backend/web/index.php?r=auth-item', '角色或权限')">角色或权限</a></span></li>
+                          <li><span><a href="javascript:;" onclick="mainJs.addTab('http://localhost/yii-application-demo/backend/web/index.php?r=auth-item-child', '角色权限关联')">角色权限关联</a></span></li>
+                          <li><span><a href="javascript:;" onclick="mainJs.addTab('http://localhost/yii-application-demo/backend/web/index.php?r=auth-assignment', '用户角色')">用户角色</a></span></li>
+                          <li><span><a href="javascript:;" onclick="mainJs.addTab('http://localhost/yii-application-demo/backend/web/index.php?r=auth-rule', '规则')">规则</a></span></li>
+                          <li><span><a href="javascript:;" onclick="mainJs.addTab('http://localhost/yii-application-demo/backend/web/index.php?r=user', '用户')">用户</a></span></li>
                        </ul>
                   </li>
               </ul>
@@ -127,7 +127,7 @@
 
     $(document).ready(
         function(){
-            mainJs.wellcomeInit('欢迎界面','/yii-application/frontend/web/index.php');
+            mainJs.wellcomeInit('欢迎界面','/yii-application-demo/frontend/web/index.php');
             mainJs.collapseAll();
         }
     );

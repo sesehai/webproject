@@ -82,10 +82,10 @@ class Order extends BaseActiveRecord
     {
         return [
             'id' => 'ID',
-            'customer_name' => 'Customer Name',
-            'customer_phone' => 'Customer Phone',
-            'customer_address' => 'Customer Address',
-            'customer_province' => 'Customer Province',
+            'customer_name' => '客户姓名',
+            'customer_phone' => '客户电话',
+            'customer_address' => '地址',
+            'customer_province' => '省',
             'customer_city' => 'Customer City',
             'customer_district' => 'Customer District',
             'car_plate_type' => 'Car Plate Type',
@@ -99,7 +99,7 @@ class Order extends BaseActiveRecord
             'pay_type' => 'Pay Type',
             'invoice_title' => 'Invoice Title',
             'remark' => 'Remark',
-            'addtime' => 'Addtime',
+            'addtime' => '添加时间',
             'updatetime' => 'Updatetime',
             'status' => 'Status',
             'maintance_type' => 'Maintance Type',

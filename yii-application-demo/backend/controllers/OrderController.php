@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use backend\models\BackendOrder;
 use yii\data\ActiveDataProvider;
+use yii\data\SqlDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -41,12 +42,52 @@ class OrderController extends Controller
         }
 
         BaseCommon::checkIsGuest();
-        $dataProvider = new ActiveDataProvider([
-            'query' => BackendOrder::find(),
-        ]);
+        // $sql = "SELECT * FROM `order`";
+        // $dataProvider = new ActiveDataProvider([
+        //     'query' => BackendOrder::find(),
+        //     // 'query' => BackendOrder::findBySql($sql, $params = []),
+        //     'pagination' => [
+        //         'pageSize' => 2,
+        //     ],
+        // ]);
+
+        // $count = Yii::$app->db->createCommand('
+        //     SELECT COUNT(*) FROM `order` WHERE `status`=:status
+        // ', [':status' => 9])->queryScalar();
+
+        // $dataProvider = new SqlDataProvider([
+        //     'sql' => 'SELECT * FROM `order` WHERE `status`=:status',
+        //     'params' => [':status' => 9],
+        //     'totalCount' => $count,
+        //     'sort' => [
+        //         'attributes' => [
+        //             'id',
+        //             'addtime' => [
+        //                 'asc' => ['addtime' => SORT_ASC],
+        //                 'default' => SORT_DESC,
+        //                 'label' => '添加时间',
+        //             ],
+        //         ],
+        //     ],
+        //     'pagination' => [
+        //         'pageSize' => 20,
+        //     ],
+        // ]);
+
+        // get the user records in the current page
+        // $models = $dataProvider->getModels();
+
+        // return $this->render('index', [
+        //     'dataProvider' => $dataProvider,
+        // ]);
+
+
+        $backendOrder = new BackendOrder();
+        $dataProvider = $backendOrder->search(Yii::$app->request->get());
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'backendOrder' => $backendOrder,
         ]);
     }
 

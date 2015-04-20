@@ -6,21 +6,24 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Backend Orders';
+$this->title = Yii::t('app', 'Order Manage');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="backend-order-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h4><?= Html::encode($this->title) ?></h4>
 
     <p>
-        <?= Html::a('Create Backend Order', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Create Order'), ['create'], ['class' => 'btn btn-success btn-sm']) ?>
     </p>
 
     <?= GridView::widget([
+        'tableOptions' => ['class' => 'table table-condensed table-bordered'],
         'dataProvider' => $dataProvider,
+        'filterModel' => $backendOrder,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            // ['class' => 'yii\grid\SerialColumn'],
+            ['class' => 'yii\grid\CheckboxColumn'],
 
             'id',
             'customer_name',
@@ -40,7 +43,10 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'pay_type',
             // 'invoice_title',
             // 'remark',
-            // 'addtime',
+            [
+                'attribute' => 'addtime',
+                'format' => ['date', 'php:Y-m-d']
+            ],
             // 'updatetime',
             // 'status',
             // 'maintance_type',
@@ -59,7 +65,11 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'latitude',
             // 'product_is_sale',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {update}',
+                'buttons' => ['view','delete','update'],
+            ],
         ],
     ]); ?>
 
