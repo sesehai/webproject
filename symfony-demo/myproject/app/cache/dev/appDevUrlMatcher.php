@@ -203,6 +203,11 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
                 return array (  '_controller' => 'Acme\\DemoBundle\\Controller\\DemoController::contactAction',  '_route' => '_demo_contact',);
             }
 
+            // _demo_test
+            if ($pathinfo === '/demo/test') {
+                return array (  '_controller' => 'Acme\\DemoBundle\\Controller\\DemoController::testAction',  '_route' => '_demo_test',);
+            }
+
         }
 
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();

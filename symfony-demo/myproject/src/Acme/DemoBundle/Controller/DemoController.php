@@ -5,6 +5,7 @@ namespace Acme\DemoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Acme\DemoBundle\Form\ContactType;
 
 // these import the "@Route" and "@Template" annotations
@@ -53,4 +54,13 @@ class DemoController extends Controller
 
         return array('form' => $form->createView());
     }
+
+    /**
+     * @Route("/test", name="_demo_test")
+     */
+    public function testAction()
+    {
+        return new Response("<div style='color:#1111;'>Demo Test</div>");
+    }
+
 }
