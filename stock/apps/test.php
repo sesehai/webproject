@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php
 error_reporting(E_ALL);
 ini_set("display_errors","on");
@@ -50,3 +51,18 @@ $params = array(
 checkSign($sign_key =  'poi345', $params, $sign = '000');
 
 echo 'devid=f7df2fd05e49e6c9d373959229f79218&imei=111&mac=222&pcode=0101202990357&userid=42662154&username=qq_36F1F049B42239F131F9ABC53BCB82F7&version=6.0&poi345';
+=======
+<?php
+// $str = "abc";
+// $find = "b";
+// $pos = strpos($str, $find);
+// if( $pos != false ){
+//     echo "yes";
+// }else{
+//     echo "no";
+// }
+//
+// echo md5("_010210173_5.9_adcache");
+
+echo md5('cityId=55&education=高中&idNumber=410521198708016078&photoBack=http://image.gojsgo.cn/images/2015/07/18/20150718201948.jpg&photoEducation=http://image.gojsgo.cn/images/2015/06/23/20150623190016.jpg&photoFront=http://image.gojsgo.cn/images/2015/07/18/20150718201900.jpg&picture=http://image.gojsgo.cn/images/2015/06/23/20150623160236.jpg&provinceId=4&realName=申测试2&sex=1&123456');
+>>>>>>> 54ffeeaaf0dd2dbc6ad9e95a78c253513e49c553
