@@ -9,13 +9,13 @@ spl_autoload_register(array('Base','auto_load'));
 $qq_Gtimg = new Qq_Gtimg();
 $codesAry = array(
     // 'sz300005',
-    'sh600016',
+    // 'sh600016',
     // 'sh600717',
     // 'sz300058',
     // 'sh603899',
-    'sz300104',
-    'sz000829',
-    'sz002657',
+    // 'sz300104',
+    // 'sz000829',
+    // 'sz002657',
 );
 $infosAry = $qq_Gtimg->getInfosByCode($codesAry);
 $header = "";

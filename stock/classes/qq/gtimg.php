@@ -1,10 +1,13 @@
 <?php
-class Qq_Gtimg {
-    public function getName() {
+class qq_gtimg
+{
+    public function getName()
+    {
         return __METHOD__;
     }
 
-    public function __construct($config = array()){
+    public function __construct($config = array())
+    {
     }
 
     /**
@@ -12,14 +15,15 @@ class Qq_Gtimg {
      * @param array $codesAry
      * @return array
      */
-    public function getInfosByCode($codesAry){
+    public function getInfosByCode($codesAry)
+    {
         // http://qt.gtimg.qq.com/?q=sz300005,sh600016,sh600717
         // response:
         // v_sz300005="51~探路者~300005~27.71~26.39~26.30~186660~107280~79380~27.71~30~27.70~544~27.69~169~27.68~45~27.67~1~27.72~25~27.73~134~27.74~216~27.75~234~27.76~33~14:34:00/27.71/36/S/99762/15151|14:33:54/27.71/51/S/141369/15146|14:33:51/27.71/1/S/2771/15144|14:33:45/27.71/7/B/19397/15140|14:33:45/27.72/48/B/133002/15137|14:33:40/27.71/12/B/33252/15132~20150421143400~1.32~5.00~27.73~26.30~27.71/186624/508135993~186660~50824~5.76~45.72~~27.73~26.30~5.42~89.83~142.16~10.58~29.03~23.75~";
         $result = array();
         $gtimgApi = 'http://qt.gtimg.qq.com/?';
         // $gtimgApi = 'http://test2.m.letv.com/luq.php?';
-        if( !empty($codesAry) ){
+        if (!empty($codesAry)) {
             $q = implode(',', $codesAry);
             $url = $gtimgApi."q=".$q;
             $cookie = '';
@@ -27,14 +31,15 @@ class Qq_Gtimg {
             $content = iconv("GBK", "utf-8", $content);
             $contentAry = explode(";", $content);
             $result = $this->_filterData($contentAry);
-        }else{
+        } else {
             $result = array();
         }
 
         return $result;
     }
 
-    private function _filterData($contentAry){
+    private function _filterData($contentAry)
+    {
         $columsAry = array(
             // 0 => '未知',
             // 1 => '名字',
@@ -74,7 +79,7 @@ class Qq_Gtimg {
         $result['header'] = $columsAry;
         foreach ($contentAry as $stString) {
             $stString = trim($stString);
-            if( !empty($stString) ){
+            if (!empty($stString)) {
                 $stKeyValAry = explode('"', $stString);
                 $strAry = explode('~', $stKeyValAry[1]);
                 $item = array();
@@ -88,7 +93,8 @@ class Qq_Gtimg {
         return $result;
     }
 
-    private function _curl($url, $cookie){
+    private function _curl($url, $cookie)
+    {
         $urlAry = parse_url($url);
         $host = $urlAry['host'];
         $ch = curl_init();
@@ -105,12 +111,11 @@ class Qq_Gtimg {
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
         curl_setopt($ch, CURLOPT_NOBODY, 0);
         curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $header); 
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $ret = curl_exec($ch);
         curl_close($ch);
 
         return $ret;
     }
-
 }
