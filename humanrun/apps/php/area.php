@@ -19,7 +19,7 @@ class Area
                'db_type' => 'mysql',
                'dbconfig' => array (
                     'host' =>'',
-                    'port' => '',
+                    'port' => '3306',
                     'dbname' => '',
                     'username' => '',
                     'password' => '',
@@ -51,8 +51,63 @@ class Area
 
         }
     }
+
+    /**
+     * 省份 坐标获取
+     */
+    public function getLngLatLevel0(){
+        $sql = "SELECT * FROM `area` WHERE `level` = 0";
+        $leve0Rows = $this->_pdoModel->query($sql, array());
+        $num = 1;
+        foreach ($leve0Rows as $key => $value) {
+            echo $num . "\t" . $value['area_name'];
+            echo "\n";
+            $level0RowsLngLat = $this->_pdoModel->query("SELECT * FROM `wc_area` WHERE `level` = '省' AND `areaname` LIKE '{$value['area_name']}%' ", array());
+            foreach ($level0RowsLngLat as $lnglatRow) {
+                echo "\t" . $lnglatRow['lng'] . "\t" . $lnglatRow['Lat'] . "\n";
+            }
+            $num++;
+        }
+    }
+
+    /**
+     * 市 坐标获取
+     */
+    public function getLngLatLevel2(){
+        $sql = "SELECT * FROM `area` WHERE `level` = 2";
+        $leve2Rows = $this->_pdoModel->query($sql, array());
+        $num = 1;
+        foreach ($leve2Rows as $key => $value) {
+            echo $num . "\t" . $value['area_name'];
+            echo "\n";
+            $level2RowsLngLat = $this->_pdoModel->query("SELECT * FROM `wc_area` WHERE `level` = '市' AND `areaname` LIKE '{$value['area_name']}%' ", array());
+            foreach ($level2RowsLngLat as $lnglatRow) {
+                echo "\t" . $lnglatRow['lng'] . "\t" . $lnglatRow['Lat'] . "\n";
+            }
+            $num++;
+        }
+    }
+
+    /**
+     * 区 坐标获取
+     */
+    public function getLngLatLevel3(){
+        $sql = "SELECT * FROM `area` WHERE `level` = 2";
+        $leve3Rows = $this->_pdoModel->query($sql, array());
+        $num = 1;
+        foreach ($leve3Rows as $key => $value) {
+            echo $num . "\t" . $value['area_name'];
+            echo "\n";
+            $level3RowsLngLat = $this->_pdoModel->query("SELECT * FROM `wc_area` WHERE `level` = '区' AND `areaname` LIKE '{$value['area_name']}%' ", array());
+            foreach ($level3RowsLngLat as $lnglatRow) {
+                echo "\t" . $lnglatRow['lng'] . "\t" . $lnglatRow['Lat'] . "\n";
+            }
+            $num++;
+        }
+    }
+
 }
 
 $area = new Area(array());
 
-$area->getLeve2NoLevelCity();
+$area->getLngLatLevel3();
