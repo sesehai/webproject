@@ -39,7 +39,7 @@ function login($phone){
 
 // TODO
 // 第一步，从文件读取手机号，登陆生成ticket保存到文件
-// $ticket = login('13651181081');
+// $ticket = login($phone);
 
 // 第二步，读取ticket 文件 和 task 文件进行批量接单
 $orderAuto = new Order_Auto();
