@@ -37,23 +37,32 @@ function login($phone){
     return $ticket;
 }
 
-// TODO
+function receive(){
+    $orderAuto = new Order_Auto();
+    $file = ROOT_PATH . str_replace('/', DIRECTORY_SEPARATOR, '/apps/data/order/login.log');
+    $contents = file_get_contents($file);
+    $ticketsLine = explode("\n", $content);
+    $ticketAry = array();
+    foreach ($ticketsLine as $key => $value) {
+        $tikets = explode(" ", $value);
+        // 每个手机号一个最新ticket
+        $ticketAry[$tikets[2]] = $tikets[3];
+    }
+
+    // 第三步，接单，到岗、报单
+    foreach ($ticketAry as $phone => $ticket) {
+        $receiveResult = $orderAuto->receive($ticket, $tid);
+    }
+}
+
 // 第一步，从文件读取手机号，登陆生成ticket保存到文件
-// $ticket = login($phone);
+$file = ROOT_PATH . str_replace('/', DIRECTORY_SEPARATOR, '/apps/data/order/phone.txt');
+$contents = file_get_contents($file);
+$phoneAry = explode("\n", $content);
+foreach ($phoneAry as $phone) {
+    $ticket = login($phone);
+}
+
 
 // 第二步，读取ticket 文件 和 task 文件进行批量接单
-$orderAuto = new Order_Auto();
-$file = ROOT_PATH . str_replace('/', DIRECTORY_SEPARATOR, '/apps/data/order/login.log');
-$contents = file_get_contents($file);
-$ticketsLine = explode("\n", $content);
-$ticketAry = array();
-foreach ($ticketsLine as $key => $value) {
-    $tikets = explode(" ", $value);
-    // 每个手机号一个最新ticket
-    $ticketAry[$tikets[2]] = $tikets[3];
-}
-
-// 第三步，接单，到岗、报单
-foreach ($ticketAry as $phone => $ticket) {
-    $receiveResult = $orderAuto->receive($ticket, $tid);
-}
+receive();
