@@ -1,2 +1,5 @@
-symfony-demo/myproject/app/cache/*
-symfony-demo/myproject/app/logs/*
+.DS_Store
+.buildpath
+.project
+.settings/
+/nbproject/private/
