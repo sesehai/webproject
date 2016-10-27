@@ -2,8 +2,11 @@ package com.sesehai.magic.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -20,6 +23,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,6 +35,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.sesehai.magic.R;
+import com.sesehai.magic.provider.UserProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +45,12 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
+@SuppressLint("NewApi")
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
+    private  static  final  String MYPREFERENCE = "mypreference";
+    private static final String LOGINED = "logined";
+    private SharedPreferences sharedPreferences;
     /**
      * Id to identity READ_CONTACTS permission request.
      */
@@ -68,6 +77,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferences = getSharedPreferences(MYPREFERENCE, Context.MODE_PRIVATE);
+        String logined = sharedPreferences.getString(LOGINED, "");
+        if(logined.equals("")){
+            goHomePage();
+        }
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -103,6 +117,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        Log.i("luq","loginOncreate");
     }
 
     private void populateAutoComplete() {
@@ -311,6 +327,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //        bundle.putString("userName", "来自登陆");
 //        intent.putExtras(bundle);
         startActivity(intent);
+        Log.i("luq","onClickRegister");
+    }
+
+    /**
+     * 打开首页页面
+     */
+    public void goHomePage(){
+        Intent intent = new Intent();
+        intent.setClass(this, HomeActivity.class);
+//        Bundle bundle=new Bundle();
+//        bundle.putString("userName", "来自登陆");
+//        intent.putExtras(bundle);
+        startActivity(intent);
+        Log.i("luq","goHomePage");
     }
 
     /**
@@ -338,16 +368,30 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
+//            UserProvider userProvider = new UserProvider();
+//            Uri URI = Uri.parse("content://" + UserProvider.AUTHORITY + "/" + UserProvider.TABLE_USER);
+            String[] selection = {mEmail};
+            Cursor c = getContentResolver().query(UserProvider.URI, null, UserProvider.COL_NAME + " = ?", selection, null);
+//            Cursor c = userProvider.query(UserProvider.URI, null, UserProvider.COL_NAME + " = ?", selection, null);
+
+            Log.i("luq", "登陆检查mEmail:" + mEmail);
+            if (c != null && c.moveToFirst() && c.getString(c.getColumnIndex(UserProvider.COL_ID)) != null){
+                if(c.getString(c.getColumnIndex(UserProvider.COL_PASSWORD)) != null && c.getString(c.getColumnIndex(UserProvider.COL_PASSWORD)).equals(mPassword) ){
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(LOGINED, c.getString(c.getColumnIndex(UserProvider.COL_ID)));
+                    editor.commit();
+                    Log.i("luq", "登陆成功");
+                    Log.i("luq", "pwd:" + c.getString(c.getColumnIndex(UserProvider.COL_PASSWORD)) + ",name:" + c.getString(c.getColumnIndex(UserProvider.COL_NAME)));
+                    return true;
+                }else{
+                    Log.i("luq", "登陆失败");
+                    return false;
                 }
+            }else{
+                Log.i("luq", "登陆检查mEmail，没有此用户" + mEmail);
+                return false;
             }
 
-            // TODO: register the new account here.
-            return true;
         }
 
         @Override
@@ -357,6 +401,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (success) {
                 finish();
+
+                goHomePage();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

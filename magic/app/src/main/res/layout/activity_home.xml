@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#EED8AE"
+    android:orientation="vertical"
+    android:paddingTop="0dp">
+
+    <include layout="@layout/top"></include>
+
+    <fragment
+        android:id="@+id/fragment_home"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        class="com.sesehai.magic.fragment.HomeFragment" />
+
+    <fragment
+        android:id="@+id/fragment_list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        class="com.sesehai.magic.fragment.ListFragment" />
+
+    <fragment
+        android:id="@+id/fragment_settings"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        class="com.sesehai.magic.fragment.SettingsFragment" />
+
+    <com.sesehai.magic.fragment.FragmentIndicator
+        android:id="@+id/indicator"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#BFEFFF" />
+
+</LinearLayout>

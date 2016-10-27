@@ -3,6 +3,7 @@ package com.sesehai.magic.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.ContentValues;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -19,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,11 +31,13 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.sesehai.magic.R;
+import com.sesehai.magic.provider.UserProvider;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -57,7 +61,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
+    private UserRegisterTask mAuthTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -78,17 +82,28 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.register || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    attemptRegister();
                     return true;
                 }
                 return false;
             }
         });
 
+        Button mSignInButton = (Button) findViewById(R.id.email_register_button);
+        mSignInButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptRegister();
+            }
+        });
+
         mLoginFormView = findViewById(R.id.register_form);
         mProgressView = findViewById(R.id.register_progress);
 
+        //顶部导航支持回退
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Log.i("luq","register onCreate");
 
     }
 
@@ -148,7 +163,8 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
+    private void attemptRegister() {
+        Log.i("luq", "attemptRegister");
         if (mAuthTask != null) {
             return;
         }
@@ -190,7 +206,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserRegisterTask(email, password);
             mAuthTask.execute((Void) null);
         }
     }
@@ -299,12 +315,12 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
         private final String mPassword;
 
-        UserLoginTask(String email, String password) {
+        UserRegisterTask(String email, String password) {
             mEmail = email;
             mPassword = password;
         }
@@ -312,6 +328,26 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
+//            UserProvider userProvider = new UserProvider();
+            String[] selection = {mEmail};
+            Cursor c = getContentResolver().query(UserProvider.URI, null, UserProvider.COL_NAME + " = ?", selection, null);
+//            Cursor c = userProvider.query(UserProvider.URI, null, UserProvider.COL_NAME + " = ?", selection, null);
+
+            if (c != null && c.moveToFirst() && c.getString(c.getColumnIndex(UserProvider.COL_ID)) != null){
+                //TODO  用户名已存在
+                Log.i("luq","用户已存在");
+                return false;
+            }else{
+                //TODO 添加用户
+                Log.i("luq","添加用户开始");
+                ContentValues cv = new ContentValues();
+                cv.put(UserProvider.COL_NAME, mEmail);
+                cv.put(UserProvider.COL_PASSWORD,mPassword);
+                getContentResolver().insert(UserProvider.URI,cv);
+//                userProvider.insert(UserProvider.URI,cv);
+                Log.i("luq", cv.toString());
+                Log.i("luq","添加用户结束");
+            }
 
             try {
                 // Simulate network access.
@@ -320,15 +356,15 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                 return false;
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
+//            for (String credential : DUMMY_CREDENTIALS) {
+//                String[] pieces = credential.split(":");
+//                if (pieces[0].equals(mEmail)) {
+//                    // Account exists, return true if the password matches.
+//                    return pieces[1].equals(mPassword);
+//                }
+//            }
 
-            // TODO: register the new account here.
+
             return true;
         }
 
@@ -336,6 +372,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
+            Log.i("luq","onPostExecute");
 
             if (success) {
                 finish();

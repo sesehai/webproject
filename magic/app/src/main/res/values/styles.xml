@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="actionOverflowButtonStyle">@style/OverflowButtonStyle</item>
         <!-- 系统默认配置 -->
@@ -13,5 +13,6 @@
     <style name="OverflowButtonStyle" parent="@android:style/Widget.ActionButton.Overflow">
         <item name="android:text">@string/top_back_button</item>
     </style>
+
 
 </resources>

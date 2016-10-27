@@ -9,33 +9,31 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
+import android.util.Log;
 
 import com.sesehai.magic.database.DatabaseHelper;
 
-public class ItemProvider extends ContentProvider {
+public class UserProvider extends ContentProvider {
 
     /**
      * Database specific constant declarations
      */
     private SQLiteDatabase db;
 
-    public static  String AUTHORITY = "com.sesehai.magic.db.magic.item";
-    public static final String TABLE_NAME= "item";
+    public static String AUTHORITY = "com.sesehai.magic.db.magic.user";
+    public static final String TABLE_NAME = "user";
     public static final Uri URI = Uri.parse("content://" + AUTHORITY + "/" + TABLE_NAME);
     private static final int MATCH_CODE = 1;
-    public static final String COL_ID= "_id";
-    public static final String COL_POSITION_ID = "position_id";
-    public static final String COL_NAME= "name";
-    public static final String COL_DESC= "desc";
-    public static final String COL_CTIME= "ctime";
-    public static final String COL_UTIME= "utime";
-    public static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
+    public static final String COL_ID = "_id";
+    public static final String COL_NAME = "name";
+    public static final String COL_PASSWORD = "password";
+    public static final String COL_NICKNAME = "nickname";
+    public static final String COL_CTIME = "ctime";
+    public static final String COL_UTIME = "utime";
+    private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
         URI_MATCHER.addURI(AUTHORITY, TABLE_NAME, MATCH_CODE);
-    }
-
-    public ItemProvider() {
     }
 
     @Override
@@ -46,14 +44,17 @@ public class ItemProvider extends ContentProvider {
          * Create a write able database which will trigger its creation if it
          * doesn't already exist.
          */
+        Log.i("luq", "获取db实例开始");
         db = helper.getWritableDatabase();
+        Log.i("luq", "获取db实例结束");
+        Log.i("luq", db.toString());
         return (db == null) ? false : true;
     }
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        int count= 0;
-        try{
+        int count = 0;
+        try {
 
             int match = URI_MATCHER.match(uri);
             switch (match) {
@@ -64,7 +65,7 @@ public class ItemProvider extends ContentProvider {
                     throw new UnsupportedOperationException("Unknown or unsupported URL: " + uri.toString());
             }
             this.getContext().getContentResolver().notifyChange(uri, null);
-        }catch(Exception e) {
+        } catch (Exception e) {
 
             e.printStackTrace();
         }
@@ -82,20 +83,27 @@ public class ItemProvider extends ContentProvider {
     public Uri insert(Uri uri, ContentValues values) {
         // TODO: Implement this to handle requests to insert a new row.
 
+        Log.i("luq", "执行insert");
         long rowId;
         Uri newUri = null;
-        try{
+        try {
 
             int match = URI_MATCHER.match(uri);
+            Log.i("luq", "match:" + match);
+            Log.i("luq", "获取db信息");
             switch (match) {
                 case MATCH_CODE:
-                    rowId = db.insert(TABLE_NAME , null, values);
+                    Log.i("luq", "匹配insert方法");
+                    rowId = db.insert(TABLE_NAME, null, values);
+                    Log.i("luq", "insert");
                     if (rowId > 0) {
                         newUri = ContentUris.withAppendedId(URI, rowId);
+                        Log.i("luq", "insert success");
                     }
                     break;
 
                 default:
+                    Log.i("luq", "匹配默认");
                     throw new UnsupportedOperationException("Unknown or unsupported URL: " + uri.toString());
 
             }
@@ -103,31 +111,29 @@ public class ItemProvider extends ContentProvider {
             if (newUri != null) {
                 getContext().getContentResolver().notifyChange(uri, null);
             }
-        }catch(Exception e) {
-
+        } catch (Exception e) {
+            Log.i("luq", "insert 异常" + e.getMessage());
             e.printStackTrace();
         }
         return newUri;
     }
 
-
-
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
         Cursor cursor = null;
-        try{
+        try {
 
             int match = URI_MATCHER.match(uri);
             switch (match) {
                 case MATCH_CODE:
-                    cursor = db.query(TABLE_NAME, null, selection, selectionArgs,null, null, sortOrder);
+                    cursor = db.query(TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                     cursor.setNotificationUri(getContext().getContentResolver(), uri);
                     break;
                 default:
                     throw new UnsupportedOperationException("Unknown or unsupported URL: " + uri.toString());
             }
-        }catch(Exception e) {
+        } catch (Exception e) {
 
             e.printStackTrace();
         }
@@ -137,8 +143,8 @@ public class ItemProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
-        int count= 0;
-        try{
+        int count = 0;
+        try {
 
             int match = URI_MATCHER.match(uri);
 
@@ -151,7 +157,7 @@ public class ItemProvider extends ContentProvider {
             }
 
             this.getContext().getContentResolver().notifyChange(uri, null);
-        }catch(Exception e) {
+        } catch (Exception e) {
 
             e.printStackTrace();
         }

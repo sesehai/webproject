@@ -10,58 +10,44 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 
+import com.sesehai.magic.database.DatabaseHelper;
+
 public class HouseProvider extends ContentProvider {
-
-    class DBHelper extends SQLiteOpenHelper {
-
-        private static final String DB_MAGIC = "magic.db";
-        private static final int VERSION = 1;
-
-        public DBHelper(Context context) {
-            super(context, DB_MAGIC, null, VERSION);
-        }
-
-        /**
-         * 第一次运行的时候创建
-         */
-        @Override
-        public void onCreate(SQLiteDatabase db) {
-            db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_HOUSE + " ("+COL_ID+" integer primary key autoincrement, "+COL_USER_ID+" text, "+COL_NAME+" text, "+COL_DESC+" text, "+COL_CTIME+" text, "+COL_UTIME+" text)");
-        }
-
-        /**
-         * 更新的时候
-         */
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_HOUSE);
-            onCreate(db);
-        }
-    }
 
     /**
      * Database specific constant declarations
      */
     private SQLiteDatabase db;
 
-    public static  String AUTHORITY = "com.sesehai.magic.db.magic";
-    private static final String TABLE_HOUSE= "house";
-    public static final Uri URI = Uri.parse("content://" + AUTHORITY + "/" + TABLE_HOUSE);
+    public static  String AUTHORITY = "com.sesehai.magic.db.magic.house";
+    public static final String TABLE_NAME= "house";
+    public static final Uri URI = Uri.parse("content://" + AUTHORITY + "/" + TABLE_NAME);
     private static final int MATCH_CODE = 1;
     public static final String COL_ID= "_id";
     public static final String COL_USER_ID= "user_id";
     public static final String COL_NAME= "name";
-    private static final String COL_DESC= "desc";
-    private static final String COL_CTIME= "ctime";
-    private static final String COL_UTIME= "utime";
-    private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
+    public static final String COL_DESC= "desc";
+    public static final String COL_CTIME= "ctime";
+    public static final String COL_UTIME= "utime";
+    public static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-        URI_MATCHER.addURI(AUTHORITY, TABLE_HOUSE, MATCH_CODE);
+        URI_MATCHER.addURI(AUTHORITY, TABLE_NAME, MATCH_CODE);
     }
-    DBHelper helper= null;
 
     public HouseProvider() {
+    }
+
+    @Override
+    public boolean onCreate() {
+        // TODO: Implement this to initialize your content provider on startup.
+        DatabaseHelper helper = new DatabaseHelper(this.getContext());
+        /**
+         * Create a write able database which will trigger its creation if it
+         * doesn't already exist.
+         */
+        db = helper.getWritableDatabase();
+        return (db == null) ? false : true;
     }
 
     @Override
@@ -70,10 +56,9 @@ public class HouseProvider extends ContentProvider {
         try{
 
             int match = URI_MATCHER.match(uri);
-            SQLiteDatabase db = helper.getWritableDatabase();
             switch (match) {
                 case MATCH_CODE:
-                    count = db.delete(TABLE_HOUSE, selection, selectionArgs);
+                    count = db.delete(TABLE_NAME, selection, selectionArgs);
                     break;
                 default:
                     throw new UnsupportedOperationException("Unknown or unsupported URL: " + uri.toString());
@@ -102,10 +87,9 @@ public class HouseProvider extends ContentProvider {
         try{
 
             int match = URI_MATCHER.match(uri);
-            SQLiteDatabase db = helper.getWritableDatabase();
             switch (match) {
                 case MATCH_CODE:
-                    rowId = db.insert(TABLE_HOUSE , null, values);
+                    rowId = db.insert(TABLE_NAME , null, values);
                     if (rowId > 0) {
                         newUri = ContentUris.withAppendedId(URI, rowId);
                     }
@@ -127,22 +111,25 @@ public class HouseProvider extends ContentProvider {
     }
 
     @Override
-    public boolean onCreate() {
-        // TODO: Implement this to initialize your content provider on startup.
-        helper= new DBHelper(this.getContext());
-        /**
-         * Create a write able database which will trigger its creation if it
-         * doesn't already exist.
-         */
-        db = helper.getWritableDatabase();
-        return (db == null) ? false : true;
-    }
-
-    @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
-        // TODO: Implement this to handle query requests from clients.
-        throw new UnsupportedOperationException("Not yet implemented");
+        Cursor cursor = null;
+        try{
+
+            int match = URI_MATCHER.match(uri);
+            switch (match) {
+                case MATCH_CODE:
+                    cursor = db.query(TABLE_NAME, null, selection, selectionArgs,null, null, sortOrder);
+                    cursor.setNotificationUri(getContext().getContentResolver(), uri);
+                    break;
+                default:
+                    throw new UnsupportedOperationException("Unknown or unsupported URL: " + uri.toString());
+            }
+        }catch(Exception e) {
+
+            e.printStackTrace();
+        }
+        return cursor;
     }
 
     @Override
@@ -152,11 +139,9 @@ public class HouseProvider extends ContentProvider {
         try{
 
             int match = URI_MATCHER.match(uri);
-            SQLiteDatabase db = helper.getWritableDatabase();
-
             switch (match) {
                 case MATCH_CODE:
-                    count = db.update(TABLE_HOUSE, values, selection, selectionArgs);
+                    count = db.update(TABLE_NAME, values, selection, selectionArgs);
                     break;
                 default:
                     throw new UnsupportedOperationException("Unknown or unsupported URL: " + uri.toString());
