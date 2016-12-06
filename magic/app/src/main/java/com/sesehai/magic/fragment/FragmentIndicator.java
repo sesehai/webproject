@@ -35,7 +35,7 @@ public class FragmentIndicator extends LinearLayout implements OnClickListener {
     private static final String TAG_TEXT_1 = "text_tag_1";
     private static final String TAG_TEXT_2 = "text_tag_2";
 
-    private static final int COLOR_UNSELECT = Color.WHITE;
+    private static final int COLOR_UNSELECT = Color.BLACK;
     private static final int COLOR_SELECT = Color.GREEN;
 
     private FragmentIndicator(Context context) {

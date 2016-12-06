@@ -25,4 +25,21 @@
     <string name="tab_list">列表</string>
     <string name="tab_settings">设置</string>
 
+    <!-- menu -->
+    <string name="action_search">action_search</string>
+    <string name="action_plus">action_plus</string>
+    <string name="action_album">action_album</string>
+    <string name="action_collection">action_collection</string>
+    <string name="action_card">action_card</string>
+    <string name="action_settings">action_settings</string>
+    <string name="action_feed">action_feed</string>
+
+    <string name="plus_group_chat">plus_group_chat</string>
+    <string name="plus_add_friend">plus_add_friend</string>
+    <string name="plus_v_chat">plus_v_chat</string>
+    <string name="plus_scan">plus_scan</string>
+    <string name="plus_take_photo">plus_take_photo</string>
+
+
+
 </resources>

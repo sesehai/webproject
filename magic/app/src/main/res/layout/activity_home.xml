@@ -2,11 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#EED8AE"
-    android:orientation="vertical"
-    android:paddingTop="0dp">
-
-    <include layout="@layout/top"></include>
+    android:background="#ffffff"
+    android:orientation="vertical">
 
     <fragment
         android:id="@+id/fragment_home"
@@ -33,6 +30,6 @@
         android:id="@+id/indicator"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="#BFEFFF" />
+        android:background="#ffffff" />
 
 </LinearLayout>
